@@ -1,0 +1,107 @@
+<div class="container my-5">
+    <div class="row g-4">
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div id="postCarousel" class="carousel slide bg-dark">
+                    <div class="carousel-inner">
+                        <% post.images.forEach((img, index) => { %>
+                            <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+                                <img src="/uploads/timeline/<%= img %>" class="d-block w-100" style="max-height: 700px; object-fit: contain;">
+                            </div>
+                        <% }); %>
+                    </div>
+                    <% if (post.images.length > 1) { %>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#postCarousel" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon"></span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#postCarousel" data-bs-slide="next">
+                            <span class="carousel-control-next-icon"></span>
+                        </button>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="/uploads/avatares/<%= post.User.profilePicture %>" class="rounded-circle me-2 border border-warning" width="45" height="45">
+                        <div>
+                            <h6 class="fw-bold mb-0"><%= post.User.fullName %></h6>
+                            <small class="text-muted">Unidade <%= post.User.unidade %></small>
+                        </div>
+                    </div>
+
+                    <h4 class="fw-bold"><%= post.title %></h4>
+                    <p class="text-muted"><%= post.description %></p>
+                    <hr>
+
+                    <div id="commentsList" class="flex-grow-1 overflow-auto mb-3" style="max-height: 400px;">
+                        <% if (post.Comments && post.Comments.length > 0) { %>
+                            <% post.Comments.forEach(comment => { %>
+                                <div class="d-flex mb-3">
+                                    <img src="/uploads/avatares/<%= comment.User.profilePicture %>" class="rounded-circle me-2" width="35" height="35">
+                                    <div class="bg-light p-2 rounded-3 w-100">
+                                        <div class="d-flex justify-content-between">
+                                            <small class="fw-bold">@<%= comment.User.username %></small>
+                                            <small class="text-muted" style="font-size: 0.7rem;"><%= new Date(comment.createdAt).toLocaleDateString() %></small>
+                                        </div>
+                                        <p class="small mb-0"><%= comment.content %></p>
+                                    </div>
+                                </div>
+                            <% }); %>
+                        <% } else { %>
+                            <p class="text-center text-muted my-4 no-comments">Ainda não há comentários. Seja o primeiro!</p>
+                        <% } %>
+                    </div>
+
+                    <form id="commentForm" data-postid="<%= post.id %>">
+                        <div class="input-group">
+                            <input type="text" id="commentContent" class="form-control border-0 bg-light" placeholder="Escreva um comentário...">
+                            <button class="btn btn-warning fw-bold" type="submit">Postar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Lógica AJAX para enviar comentário
+    document.getElementById('commentForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const content = document.getElementById('commentContent').value;
+        const postId = e.target.getAttribute('data-postid');
+
+        if (!content.trim()) return;
+
+        try {
+            const response = await fetch(`/post/${postId}/comment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                // Limpa o campo e remove o aviso de "sem comentários"
+                document.getElementById('commentContent').value = '';
+                const noComments = document.querySelector('.no-comments');
+                if (noComments) noComments.remove();
+
+                // Adiciona o novo comentário no topo da lista
+                const commentHtml = `
+                    <div class="d-flex mb-3">
+                        <img src="/uploads/avatares/${data.comment.User.profilePicture}" class="rounded-circle me-2" width="35" height="35">
+                        <div class="bg-light p-2 rounded-3 w-100">
+                            <small class="fw-bold">@${data.comment.User.username}</small>
+                            <p class="small mb-0">${data.comment.content}</p>
+                        </div>
+                    </div>`;
+                document.getElementById('commentsList').insertAdjacentHTML('afterbegin', commentHtml);
+            }
+        } catch (err) { console.error(err); }
+    });
+</script>

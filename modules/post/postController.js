@@ -1,5 +1,7 @@
 const Post = require("./postModel");
 const User = require("../user/userModel");
+const Comment = require("../comment/commentModel");
+const sequelize = require("../../config/database");
 
 exports.uploadPost = async (req, res) => {
     try {
@@ -45,4 +47,38 @@ exports.getAllPosts = async () => {
         limit: 50
     });
     return posts;
+};
+
+exports. renderPostDetail = async (req, res) => { 
+    try{ 
+        const { id } = req.params;
+        const post = await Post.findByPk(id, { 
+            include: [ 
+            { model: User, attributes: ["username", "fullname", "profilePicture", "unidade", "cargo"]},
+            { 
+                model: Comment,
+            include: [{ model: User, attributes: ["username", "fullname", "profilePicture"]}]
+            }
+        ]
+    }); 
+
+    if (!post) { 
+        req.flash("error", "Lembrança não encontrada.");
+        return res.redirect("/timeline");
+    }
+
+    // Verifica de o usuário logado curtiu este post
+    const Like = require("../like/likeModel");
+    const isLiked = req.session.user ?
+        !!(await Like.findOne({ where: { userId: req.session.user.id, postId: id } })) : false;
+    
+        res.render("post-detail", { 
+            title: post.title + " | Cidade Sorriso",
+            post,
+            isLiked
+        });
+    } catch (error) { 
+        console.error(error);
+        res.redirect("/timeline");
+    }
 };

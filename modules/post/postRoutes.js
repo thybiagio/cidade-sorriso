@@ -10,6 +10,8 @@ router.get("/upload", authMiddleware, (req, res) => {
     res.render("upload");
 });
 
+router.get("/post/:id", authMiddleware, postController.renderPostDetail);
+
 //Recebe os dados, passa pelo Multer (single image) e salva no banco
 
 // O número 10 é o limite máximo de fotos por carrossel!
