@@ -1,0 +1,10 @@
+<% if (messages.error && messages.error.length > 0) { %>
+    <div class="container mt-3">
+        <div class="alert alert-danger shadow-sm border-0"><%= messages.error %></div>
+    </div>
+<% } %>
+<% if (messages.success && messages.success.length > 0) { %>
+    <div class="container mt-3">
+        <div class="alert alert-success shadow-sm border-0"><%= messages.success %></div>
+    </div>
+<% } %>

@@ -1,5 +1,7 @@
 const User = require('./userModel');
 const bcrypt = require('bcrypt');
+const fs = require('fs');
+const path = require('path');
 
 exports.register = async (req, res) => {
     //Recebemos TODOS os dados do formulário de registro
@@ -44,31 +46,29 @@ exports.register = async (req, res) => {
 };  
 
 exports.login = async (req, res) => {
-    try{ 
+    try { 
         const { login, password } = req.body;
 
-        //Desbravador acessa com email ou username
+        // Desbravador acessa com email ou username
         const user = await User.findOne({
             where: { 
                 [require('sequelize').Op.or]: [{ email: login}, { username: login}]
             }
-    });
+        });
 
-    // Se nãoi achou o usuário, ou a senha criptografada não bate
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-        req.flash('error', 'E-mail/Usuário ou senha incorretos. Tente novamente.');
-        return res.redirect('/login');
-    }
+        // Se não achou o usuário, ou a senha criptografada não bate
+        if (!user || !(await bcrypt.compare(password, user.password))) {
+            req.flash('error', 'E-mail/Usuário ou senha incorretos. Tente novamente.');
+            return res.redirect('/login');
+        }
 
-    req.session.user = { 
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        unidade: user.unidade,
-        fullName: user.fullName,
-    };
+        // Busca a ficha completa do Desbravador (incluindo a foto de perfil)
+        // e salva TUDO na sessão. Isso garante que a Navbar funcione perfeitamente.
+        const userData = await exports.getProfile(user.id);
+        req.session.user = userData;
+        // ----------------------
 
-    res.redirect('/timeline');
+        res.redirect('/timeline');
 
     } catch (error) {
         console.error(error);
@@ -98,24 +98,37 @@ exports.getProfile = async (userId) => {
 
 //Recebe os dados novos a tela e salva no banco
 exports.updateProfile = async (req, res) => {
-    try{ 
+    try {
         const { fullName, bio, unidade, dataNascimento } = req.body;
         const userId = req.session.user.id;
-
         const updateData = { fullName, bio, unidade, dataNascimento };
+        
+        // Pega a foto antiga antes de atualizar
+        const oldUser = await User.findByPk(userId);
 
-        //Se o upload da foto via Multer deu certo, salva o nome do arquivo
-        if (req.file) { 
+        if (req.file) {
             updateData.profilePicture = req.file.filename;
         }
 
         await User.update(updateData, { where: { id: userId } });
+        
+        // Se a foto mudou, exclui a antiga do disco!
+        if (req.file && oldUser.profilePicture && oldUser.profilePicture !== 'default-profile.png') {
+            const oldProfilePicPath = path.join(__dirname, '../../public/uploads/avatares', oldUser.profilePicture);
+            fs.unlink(oldProfilePicPath, (err) => {
+                if (err) console.error('Erro ao apagar avatar antigo:', err);
+            });
+        }
+
+        // Atualiza a sessão para o navbar refletir a mudança na hora
+        const userData = await exports.getProfile(userId);
+        req.session.user = userData;
 
         req.flash('success', 'Ficha atualizada com sucesso!');
         res.redirect('/profile/edit');
     } catch (error) {
         console.error(error);
-        req.flash('error', 'Erro ao atualizar informações. Tente novamente.');
+        req.flash('error', 'Erro ao atualizar informações.');
         res.redirect('/profile/edit');
     }
 };

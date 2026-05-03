@@ -7,13 +7,16 @@ const session = require('express-session');
 const flash = require('connect-flash');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+var usersRouter = require('./modules/user/userRoutes');
 
 var app = express();
+var expressLayouts = require('express-ejs-layouts');
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.set("views", path.join(__dirname, "views/pages")); // Pasta das páginas específicas
+app.set("layout", path.join(__dirname, "views/layouts/main")); // Onde fica a "casca"
+app.use(expressLayouts);
+app.set("view engine", "ejs");
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -30,11 +33,12 @@ app.use(session({
 app.use(flash());
 app.use((req, res, next) => {
   res.locals.messages = req.flash();
+  res.locals.user = req.session.user || null; // Disponibiliza o usuário para as views
   next();
 });
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
