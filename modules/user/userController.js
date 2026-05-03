@@ -82,3 +82,40 @@ exports.logout = (req, res) => {
         res.redirect('/');
     });
 };
+
+//Busca os dadosdo desbravador para preencher a tela
+exports.getProfile = async (userId) => { 
+    try{ 
+        const user = await User.findByPk(userId, {
+            attributes: ['id','username', 'email', 'fullName', 'bio', 'profilePicture', 'unidade', 'classes', 'dataNascimento']
+        });
+        return user;
+    } catch (error) {
+        console.error(error);
+        throw new Error('Erro ao buscar perfil do desbravador.');
+    }
+};
+
+//Recebe os dados novos a tela e salva no banco
+exports.updateProfile = async (req, res) => {
+    try{ 
+        const { fullName, bio, unidade, dataNascimento } = req.body;
+        const userId = req.session.user.id;
+
+        const updateData = { fullName, bio, unidade, dataNascimento };
+
+        //Se o upload da foto via Multer deu certo, salva o nome do arquivo
+        if (req.file) { 
+            updateData.profilePicture = req.file.filename;
+        }
+
+        await User.update(updateData, { where: { id: userId } });
+
+        req.flash('success', 'Ficha atualizada com sucesso!');
+        res.redirect('/profile/edit');
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Erro ao atualizar informações. Tente novamente.');
+        res.redirect('/profile/edit');
+    }
+};

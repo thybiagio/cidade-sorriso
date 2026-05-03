@@ -24,7 +24,7 @@ const User = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false
         },
-        fullname: { 
+        fullName: { 
             type: DataTypes.STRING,
             allowNull: true
         },
@@ -45,8 +45,9 @@ const User = sequelize.define(
             allowNull: true
         },
         profilePicture: { 
-            type: DataTypes.BOOLEAN,
-            defaultValue: false
+            type: DataTypes.STRING,
+            allowNull: true,
+            defaultValue: null
         },
         isAdmin: { 
             type: DataTypes.BOOLEAN,

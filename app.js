@@ -58,7 +58,7 @@ const sequelize = require('./config/database');
 const user = require('./modules/user/userModel');
 
 // Sincroniza o modelo com o banco de dados
-sequelize.sync({ alter: true })
+sequelize.sync()
     .then(() => console.log('Banco de dados do Cidade Sorriso sincronizado com sucesso!'))
     .catch(err => console.error('Erro ao sincronizar banco:', err));
 
