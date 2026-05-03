@@ -2,6 +2,7 @@ const User = require('./userModel');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 const path = require('path');
+const Post = require('../post/postModel');
 
 exports.register = async (req, res) => {
     //Recebemos TODOS os dados do formulário de registro
@@ -96,12 +97,48 @@ exports.getProfile = async (userId) => {
     }
 };
 
+exports.showProfile = async (req, res) => {
+    try {
+        const profileUser = await User.findByPk(req.params.id || req.session.user.id, {
+            attributes: [
+                'id',
+                'username',
+                'email',
+                'fullName',
+                'bio',
+                'profilePicture',
+                'unidade',
+                'classes',
+                'cargo',
+                'dataNascimento',
+                'postsCount'
+            ],
+            include: [{ model: Post }]
+        });
+
+        if (!profileUser) {
+            req.flash('error', 'Perfil nÃ£o encontrado.');
+            return res.redirect('/timeline');
+        }
+
+        res.render('profile', {
+            profileUser,
+            isOwner: req.session.user && Number(req.session.user.id) === Number(profileUser.id)
+        });
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Erro ao carregar perfil.');
+        res.redirect('/timeline');
+    }
+};
+
 //Recebe os dados novos a tela e salva no banco
 exports.updateProfile = async (req, res) => {
     try {
-        const { fullName, bio, unidade, dataNascimento } = req.body;
+        const { fullName, bio, dataNascimento } = req.body;
+        const updateData = { fullName, bio, dataNascimento };
         const userId = req.session.user.id;
-        const updateData = { fullName, bio, unidade, dataNascimento };
+
         
         // Pega a foto antiga antes de atualizar
         const oldUser = await User.findByPk(userId);

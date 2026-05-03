@@ -55,31 +55,11 @@
                                 <p class="small text-muted mt-2">Toque na câmera para mudar sua foto oficial</p>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Nome de Usuário</label>
-                                    <input type="text" class="form-control bg-light" value="<%= user.username %>" disabled>
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">E-mail de Cadastro</label>
-                                    <input type="text" class="form-control bg-light" value="<%= user.email %>" disabled>
-                                </div>
-                            </div>
-
                             <div class="mb-3">
                                 <label for="fullName" class="form-label fw-bold">Nome Completo</label>
                                 <input type="text" class="form-control" id="fullName" name="fullName" value="<%= user.fullName || '' %>">
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6 mb-3">
-                                    <label for="dataNascimento" class="form-label fw-bold">Data de Nascimento</label>
-                                    <input type="date" class="form-control" id="dataNascimento" name="dataNascimento" value="<%= user.dataNascimento || '' %>">
-                                </div>
-                                <div class="col-md-6 mb-3">
-                                    <label for="unidade" class="form-label fw-bold">Unidade</label>
-                                    <input type="text" class="form-control" id="unidade" name="unidade" value="<%= user.unidade || '' %>">
-                                </div>
+            
                             </div>
 
                             <div class="mb-4">

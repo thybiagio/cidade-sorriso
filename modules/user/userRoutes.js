@@ -26,5 +26,7 @@ router.get("/timeline", authMiddleware, async (req, res) => {
 
 router.get("/profile/edit", authMiddleware, async (req, res) => res.render("edit-profile"));
 router.post("/profile/edit", authMiddleware, upload.single("profilePicture"), userController.updateProfile);
+router.get("/profile", authMiddleware, userController.showProfile);
+router.get("/profile/:id", authMiddleware, userController.showProfile);
 
 module.exports = router;
