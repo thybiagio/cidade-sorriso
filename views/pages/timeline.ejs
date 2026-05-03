@@ -11,64 +11,98 @@
 
             <% if (posts && posts.length > 0) { %>
                 <% posts.forEach(post => { %>
-                    <div class="card shadow-sm mb-4" style="border-radius: 12px; border: none; overflow: hidden;">
+                    <div class="card shadow-sm mb-4 border-0" style="border-radius: 15px; overflow: hidden;">
                         
                         <div class="card-header bg-white d-flex align-items-center py-3 border-0">
-                            <a href="/profile/<%= post.User.username %>" class="d-flex align-items-center text-decoration-none text-dark w-100">
+                            <a href="/profile/<%= post.User.username %>" class="d-flex align-items-center text-decoration-none text-dark">
                                 <img src="<%= post.User.profilePicture && post.User.profilePicture !== 'default-profile.png' ? '/uploads/avatares/' + post.User.profilePicture : '/images/default-profile.png' %>" 
-                                     class="rounded-circle me-3 border border-warning" width="45" height="45" style="object-fit: cover;">
+                                     class="rounded-circle me-3 border border-warning" width="40" height="40" style="object-fit: cover;">
                                 <div>
                                     <h6 class="mb-0 fw-bold"><%= post.User.fullName || post.User.username %></h6>
-                                    <small class="text-muted">
-                                        <i class="bi bi-geo-alt-fill text-warning"></i> 
-                                        Unidade <%= post.User.unidade || 'Sem Unidade' %>
-                                    </small>
+                                    <small class="text-muted">Unidade <%= post.User.unidade || 'Geral' %></small>
                                 </div>
                             </a>
-                            <small class="text-muted ms-auto text-nowrap"><%= new Date(post.createdAt).toLocaleDateString('pt-BR') %></small>
                         </div>
 
-                        <div id="carousel-<%= post.id %>" class="carousel slide" data-bs-ride="false">
-                            <div class="carousel-inner bg-dark">
+                        <div id="carousel-<%= post.id %>" class="carousel slide bg-dark">
+                            <div class="carousel-inner">
                                 <% post.images.forEach((img, index) => { %>
                                     <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
-                                        <img src="/uploads/timeline/<%= img %>" class="d-block w-100" style="aspect-ratio: 4/5; object-fit: contain;">
+                                        <img src="/uploads/timeline/<%= img %>" class="d-block w-100" style="aspect-ratio: 1/1; object-fit: cover;">
                                     </div>
                                 <% }); %>
                             </div>
                             <% if (post.images.length > 1) { %>
                                 <button class="carousel-control-prev" type="button" data-bs-target="#carousel-<%= post.id %>" data-bs-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-prev-icon"></span>
                                 </button>
                                 <button class="carousel-control-next" type="button" data-bs-target="#carousel-<%= post.id %>" data-bs-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="carousel-control-next-icon"></span>
                                 </button>
                             <% } %>
                         </div>
 
                         <div class="card-body">
-                            <h5 class="fw-bold mb-1"><%= post.title %></h5>
-                            <% if (post.description) { %>
-                                <p class="card-text text-muted mb-3"><%= post.description %></p>
-                            <% } %>
-                            <div class="d-flex align-items-center mt-2">
-                                <button class="btn btn-light border me-2 rounded-pill fw-bold text-muted">
-                                    <i class="bi bi-heart me-1 text-danger"></i> <%= post.likes || 0 %>
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <button class="btn btn-light rounded-pill px-3 btn-like border-0 shadow-sm" data-id="<%= post.id %>">
+                                    <i class="bi <%= post.isLiked ? 'bi-heart-fill text-danger' : 'bi-heart' %>"></i>
+                                    <span class="ms-1 fw-bold likes-count"><%= post.likesCount %></span>
                                 </button>
-                            </div>
-                        </div>
 
+                                <a href="/post/<%= post.id %>" class="btn btn-light rounded-pill px-3 border-0 shadow-sm">
+                                    <i class="bi bi-chat"></i>
+                                    <span class="ms-1 fw-bold"><%= post.commentsCount %></span>
+                                </a>
+                            </div>
+
+                            <h6 class="fw-bold mb-1"><%= post.title %></h6>
+                            <p class="text-muted small mb-0"><%= post.description %></p>
+                        </div>
                     </div>
                 <% }); %>
             <% } else { %>
-                <div class="text-center p-5 bg-white shadow-sm" style="border-radius: 15px;">
-                    <i class="bi bi-images text-muted mb-3" style="font-size: 4rem;"></i>
-                    <h5 class="fw-bold" style="font-family: 'Poppins', sans-serif;">Nenhuma lembrança partilhada</h5>
-                    <p class="text-muted">O álbum do clube está vazio. Seja o primeiro a publicar um momento!</p>
-                    <a href="/upload" class="btn btn-warning mt-3 rounded-pill fw-bold shadow-sm">Criar Publicação</a>
+                <div class="text-center p-5 bg-white rounded-4 shadow-sm">
+                    <i class="bi bi-camera text-muted fs-1"></i>
+                    <p class="mt-3 text-muted">Ainda não há fotos no álbum do clube.</p>
                 </div>
             <% } %>
 
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        // Lógica do Like
+        document.querySelectorAll(".btn-like").forEach(button => {
+            button.addEventListener("click", async () => {
+                const postId = button.getAttribute("data-id");
+                const icon = button.querySelector("i");
+                const countSpan = button.querySelector(".likes-count");
+
+                try {
+                    const response = await fetch(`/post/${postId}/toggle-like`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" }
+                    });
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        let currentCount = parseInt(countSpan.textContent);
+                        if (data.liked) {
+                            icon.classList.replace("bi-heart", "bi-heart-fill");
+                            icon.classList.add("text-danger");
+                            countSpan.textContent = currentCount + 1;
+                        } else {
+                            icon.classList.replace("bi-heart-fill", "bi-heart");
+                            icon.classList.remove("text-danger");
+                            countSpan.textContent = currentCount - 1;
+                        }
+                    }
+                } catch (error) {
+                    console.error("Erro ao curtir post:", error);
+                }
+            });
+        });
+    });
+</script>

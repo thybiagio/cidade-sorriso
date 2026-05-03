@@ -8,7 +8,10 @@ const Post = sequelize.define("Post",
         description: { type: DataTypes.TEXT, allowNull: true },
         images:      { type: DataTypes.JSON, allowNull: false }, 
         likes:       { type: DataTypes.INTEGER, defaultValue: 0 },
-        userId:      { type: DataTypes.INTEGER, allowNull: false, references: { model: "users", key: "id" } } 
+        userId:      { type: DataTypes.INTEGER, allowNull: false, references: { model: "users", key: "id" } },
+        likesCount:  { type: DataTypes.INTEGER, defaultValue: 0 }, 
+        commentsCount: { type: DataTypes.INTEGER, defaultValue: 0 }
+
     }, 
     {
         tableName: "posts",
