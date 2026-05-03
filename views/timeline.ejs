@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linha do Tempo | Cidade Sorriso</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #f4f4f4; font-family: 'Inter', sans-serif; }
+        .navbar { background-color: #111111; padding: 15px 0; }
+        .navbar-brand { color: #f1c40f !important; font-family: 'Poppins', sans-serif; font-weight: bold; }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/timeline">CIDADE SORRISO</a>
+            <div class="ms-auto d-flex align-items-center">
+                <span class="text-white me-3">Olá, <strong><%= user.fullName || user.username %></strong> (<%= user.unidade || 'Sem Unidade' %>)</span>
+                <a class="btn btn-outline-light btn-sm" href="/logout">Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container my-5 text-center">
+        <h2>Sua Linha do Tempo</h2>
+        <p class="text-muted">As fotos dos eventos, acampadas e especialidades aparecerão aqui em breve!</p>
+        <div class="mt-5 p-5 bg-white rounded shadow-sm">
+            <h1 class="text-muted"><i class="bi bi-camera"></i></h1>
+            <p>Área de Upload de Imagens em construção...</p>
+        </div>
+    </main>
+
+</body>
+</html>

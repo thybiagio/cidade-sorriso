@@ -41,4 +41,44 @@ exports.register = async (req, res) => {
         req.flash('error', 'Erro ao criar conta. Verifique os dados e tente novamente.');
         res.redirect('/register');
     }
-};    
+};  
+
+exports.login = async (req, res) => {
+    try{ 
+        const { login, password } = req.body;
+
+        //Desbravador acessa com email ou username
+        const user = await User.findOne({
+            where: { 
+                [require('sequelize').Op.or]: [{ email: login}, { username: login}]
+            }
+    });
+
+    // Se nãoi achou o usuário, ou a senha criptografada não bate
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+        req.flash('error', 'E-mail/Usuário ou senha incorretos. Tente novamente.');
+        return res.redirect('/login');
+    }
+
+    req.session.user = { 
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        unidade: user.unidade,
+        fullName: user.fullName,
+    };
+
+    res.redirect('/timeline');
+
+    } catch (error) {
+        console.error(error);
+        req.flash('error', 'Ocorreu um erro no sistema. Tente novamente mais tarde.');
+        res.redirect('/login');
+    }
+};
+
+exports.logout = (req, res) => {
+    req.session.destroy(() => { 
+        res.redirect('/');
+    });
+};
