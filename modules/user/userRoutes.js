@@ -1,22 +1,31 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const userController = require("./userController");
+const postController = require("../post/postController"); // Importa o controlador de posts
 const authMiddleware = require("../../middlewares/auth");
-const upload = require("../../middlewares/profileMulter");
-const postController = require("../post/postController");
+const upload = require("../../config/multer");
 
-router.get("/register", (req, res) => res.render("register"));
+// ==========================================
+// 1. ROTAS DE AUTENTICAÇÃO (Públicas)
+// ==========================================
+
+// Exibir as telas
+router.get("/register", (req, res) => res.render("register", { title: "Nova Ficha | Cidade Sorriso" }));
+router.get("/login", (req, res) => res.render("login", { title: "Entrar | Cidade Sorriso" }));
+
+// Ações do formulário
 router.post("/register", userController.register);
-
-router.get("/login", (req, res) => res.render("login"));
 router.post("/login", userController.login);
-
 router.get("/logout", userController.logout);
 
+
+// ==========================================
+// 2. LINHA DO TEMPO (Protegida)
+// ==========================================
 router.get("/timeline", authMiddleware, async (req, res) => {
     try {
         const posts = await postController.getAllPosts();
-        res.render("timeline", { posts }); // Envia a lista de posts para o EJS
+        res.render("timeline", { title: "Álbum do Clube", posts });
     } catch (error) {
         console.error("Erro ao carregar a timeline:", error);
         req.flash("error", "Erro ao carregar as lembranças do Clube.");
@@ -24,9 +33,22 @@ router.get("/timeline", authMiddleware, async (req, res) => {
     }
 });
 
-router.get("/profile/edit", authMiddleware, async (req, res) => res.render("edit-profile"));
+
+// ==========================================
+// 3. GESTÃO DE PERFIL (Protegidas)
+// ==========================================
+
+// Exibir tela de alterar foto
+router.get("/profile/edit", authMiddleware, (req, res) => {
+    // Passamos o utilizador logado (da sessão) para a página
+    res.render("edit-profile", { title: "Alterar Foto", user: req.session.user });
+});
+
+// Ação de salvar a nova foto
 router.post("/profile/edit", authMiddleware, upload.single("profilePicture"), userController.updateProfile);
-router.get("/profile", authMiddleware, userController.showProfile);
-router.get("/profile/:id", authMiddleware, userController.showProfile);
+
+// Exibir a Ficha/Portfólio Oficial (ATENÇÃO: Esta rota tem de ficar no fim para não dar conflito com a /edit)
+router.get("/profile/:username", authMiddleware, userController.renderPublicProfile);
+
 
 module.exports = router;

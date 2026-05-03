@@ -58,14 +58,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-
 require("./config/associations");
 
 // Importa o objeto 'sequelize' para conexão com o banco de dados
 const sequelize = require('./config/database');
 
 // Sincroniza o modelo com o banco de dados
-sequelize.sync({alter: true })
+sequelize.sync()
     .then(() => console.log('Banco de dados do Cidade Sorriso sincronizado com sucesso!'))
     .catch(err => console.error('Erro ao sincronizar banco:', err));
 
