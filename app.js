@@ -38,4 +38,10 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// -- Teste de conexão com o banco de dados usando Sequelize ---
+const sequelize = require('./config/database');
+sequelize.authenticate()
+  .then(() => console.log('Conexão com MariaDB (Cidade Sorriso) OK'))
+  .catch(ERR => console.error('Erro na conexão:', err));
+
 module.exports = app;
