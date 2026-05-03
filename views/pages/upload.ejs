@@ -1,0 +1,37 @@
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow" style="border: none; border-radius: 15px;">
+                <div class="card-header text-center text-white" style="background-color: #111; padding: 20px; border-radius: 15px 15px 0 0;">
+                    <h4 class="mb-0 fw-bold" style="font-family: 'Poppins', sans-serif;"><i class="bi bi-camera me-2 text-warning"></i> Nova Lembrança</h4>
+                </div>
+                <div class="card-body p-4">
+                    <form action="/upload" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Título da Lembrança</label>
+                            <input type="text" class="form-control bg-light" name="title" placeholder="Ex: Acampamento de Verão 2026" required>
+                        </div>
+                        
+                        <<div class="mb-4">
+                            <label class="form-label fw-bold">As Fotos (Pode escolher várias!)</label>
+                            <input type="file" class="form-control" name="images" accept="image/*" multiple required>
+                            <div class="form-text">Pressione Ctrl (ou segure no ecrã) para selecionar até 10 fotos de uma vez.</div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">História / Legenda</label>
+                            <textarea class="form-control bg-light" name="description" rows="3" placeholder="Conta-nos um pouco sobre este momento..."></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn fw-bold" style="background-color: #111; color: #f1c40f; padding: 12px; border-radius: 8px;">Publicar na Linha do Tempo</button>
+                            <a href="/timeline" class="btn btn-light mt-2 border">Cancelar</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

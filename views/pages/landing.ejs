@@ -1,86 +1,46 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cidade Sorriso | <%= title %></title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/stylesheets/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&display=swap" rel="stylesheet">
-</head>
-
-<body>
-    <nav class="navbar navbar-expand-lg sticky-top shadow-sm" style="background-color: var(--branco);">
-        <div class="container">
-            <a class="navbar-brand" href="/" style="font-family: 'Poppins', sans-serif;">
-                CIDADE SORRISO
+<section class="hero-section d-flex align-items-center justify-content-center text-center py-5 bg-dark" style="background-color: #111111 !important; min-height: 60vh;">
+    <div class="container position-relative z-1">
+        <h1 class="display-3 fw-bold text-white mb-3" style="font-family: 'Poppins', sans-serif;">
+            CIDADE <span class="text-warning">SORRISO</span>
+        </h1>
+        <p class="lead text-light mb-4 px-md-5" style="font-weight: 300;">
+            A aventura que faltava na tua vida! Descobre novos talentos, faz amigos e conecta-te com a natureza e com Deus.
+        </p>
+        <div class="d-flex flex-column flex-sm-row justify-content-center gap-3">
+            <a href="/register" class="btn btn-warning btn-lg px-5 fw-bold shadow-sm" style="border-radius: 30px;">
+                Quero ser Desbravador
             </a>
-            <div class="d-flex ms-auto">
-                <a class="btn btn-outline-dark me-2" href="/login">Área do Membro</a>
+            <a href="/login" class="btn btn-outline-light btn-lg px-5 fw-bold" style="border-radius: 30px;">
+                Área do Membro
+            </a>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-white">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-md-6 order-2 order-md-1">
+                <h2 class="fw-bold mb-4" style="color: #111;">Mais que um Clube, <br><span class="text-warning">uma Família</span>.</h2>
+                <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                    No Clube Cidade Sorriso, rapazes e raparigas dos 10 aos 15 anos encontram um ambiente seguro para desenvolver a sua liderança, aprender técnicas de sobrevivência na natureza e criar amizades que duram uma vida inteira.
+                </p>
+                <p class="text-muted" style="font-size: 1.1rem; line-height: 1.8;">
+                    Com reuniões semanais, acampamentos emocionantes e projetos comunitários, formamos jovens de caráter, preparados para os desafios do mundo moderno.
+                </p>
+                <div class="mt-4">
+                    <span class="badge bg-dark px-3 py-2 me-2 mb-2"><i class="bi bi-fire me-1 text-warning"></i> Fogueiras</span>
+                    <span class="badge bg-dark px-3 py-2 me-2 mb-2"><i class="bi bi-compass me-1 text-warning"></i> Orientação</span>
+                    <span class="badge bg-dark px-3 py-2 me-2 mb-2"><i class="bi bi-heart-pulse me-1 text-warning"></i> Primeiros Socorros</span>
+                    <span class="badge bg-dark px-3 py-2 me-2 mb-2"><i class="bi bi-star me-1 text-warning"></i> Especialidades</span>
+                </div>
             </div>
-        </div>
-    </nav>
-
-    <header id="hero" class="d-flex flex-column justify-content-center align-items-center text-center">
-        <div class="container">
-            <h1>Cidade Sorriso</h1>
-            <p class="lead mb-4">Disciplina, união e propósito</p>
-            <a href="#quem-somos" class="btn-black">Conhecer o Clube</a>
-        </div>
-    </header>
-
-    <section id="quem-somos" class="d-flex flex-column justify-content-center align-items-center text-center">
-        <div class="container">
-            <h2 class="mb-4">Quem Somos</h2>
-            <p class="lead" style="max-width: 800px; margin: 0 auto;">
-                Somos um grupo cristão que busca desenvolver disciplina, união e propósito entre jovens, através de organização, convivência e valores que fortalecem o caráter.
-            </p>
-            <div class="row mt-5">
-                <div class="col-md-4 mb-3">
-                    <div class="p-4" style="background: var(--fundo-card); border-radius: 10px;">
-                        <h4>Disciplina</h4>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="p-4" style="background: var(--fundo-card); border-radius: 10px;">
-                        <h4>União</h4>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-3">
-                    <div class="p-4" style="background: var(--fundo-card); border-radius: 10px;">
-                        <h4>Propósito</h4>
-                    </div>
+            <div class="col-md-6 order-1 order-md-2 text-center">
+                <div class="p-4" style="background-color: #f8f9fa; border-radius: 20px; border: 2px dashed #ccc;">
+                    <i class="bi bi-camera text-muted" style="font-size: 4rem;"></i>
+                    <p class="text-muted mt-2">Coloque uma foto de acampamento aqui!</p>
                 </div>
             </div>
         </div>
-    </section>
-
-    <section id="agenda" class="d-flex flex-column justify-content-center align-items-center">
-        <div class="container">
-            <h2 class="text-center mb-5">Próximos Eventos</h2>
-            <div class="row justify-content-center">
-                <div class="col-md-8 mb-3">
-                    <div class="evento-card p-3 d-flex align-items-center" style="border-left: 5px solid var(--igreja-biblica);">
-                        <div class="me-4 text-center" style="min-width: 80px;">
-                            <h3 class="mb-0">17</h3>
-                            <small class="text-muted">Maio</small>
-                        </div>
-                        <div>
-                            <h5 class="mb-1">Reunião Regular</h5>
-                            <span class="badge" style="background-color: var(--igreja-biblica);">Igreja Bíblica</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-dark text-white py-4 text-center">
-        <p class="mb-0">&copy; 2026 Clube Cidade Sorriso - Joinville/SC.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+    </div>
+</section>
