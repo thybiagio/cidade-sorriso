@@ -38,10 +38,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-// -- Teste de conexão com o banco de dados usando Sequelize ---
+// Importa o objeto 'sequelize' para conexão com o banco de dados
 const sequelize = require('./config/database');
-sequelize.authenticate()
-  .then(() => console.log('Conexão com MariaDB (Cidade Sorriso) OK'))
-  .catch(ERR => console.error('Erro na conexão:', err));
+// Importa o modelo User para sincronização
+const user = require('./modules/user/userModel');
+
+// Sincroniza o modelo com o banco de dados
+sequelize.sync({ alter: true })
+    .then(() => console.log('Banco de dados do Cidade Sorriso sincronizado com sucesso!'))
+    .catch(err => console.error('Erro ao sincronizar banco:', err));
 
 module.exports = app;

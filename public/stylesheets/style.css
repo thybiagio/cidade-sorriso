@@ -1,8 +1,68 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+:root {
+    --amarelo: #f1c40f;
+    --preto: #111111;
+    --branco: #ffffff;
+    --fundo-claro: #f4f4f4;
+    --fundo-card: #222222;
+
+    /* Cores Secundárias */
+    --igreja-biblica: #ff00aa;
+    --cative-pessoas: #ff0000;
 }
 
-a {
-  color: #00B7FF;
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--preto);
+}
+
+h1, h2, h3, h4, h5 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+}
+
+#hero {
+    min-height: 90vh;
+    background-color: var(--amarelo);
+}
+
+#hero h1 {
+    font-size: 4rem;
+    color: var(--preto);
+}
+
+.btn-black {
+    background-color: var(--preto);
+    color: var(--amarelo);
+    padding: 15px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-black:hover {
+    background-color: #333;
+    color: var(--amarelo);
+}
+
+#quem-somos {
+    min-height: 100vh;
+    background-color: var(--preto);
+    color: var(--branco);
+}
+
+#agenda {
+    min-height: 100vh;
+    background-color: var(--fundo-claro);
+}
+
+.evento-card {
+    background: var(--branco);
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.2s;
+}
+
+.evento-card:hover {
+    transform: translateX(5px);
 }
