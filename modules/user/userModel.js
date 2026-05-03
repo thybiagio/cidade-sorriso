@@ -32,9 +32,21 @@ const User = sequelize.define(
             type: DataTypes.STRING(255),
             allowNull: true
         },
+        unidade: {
+            type: DataTypes.STRING, 
+            allowNull: true
+        },
+        classes: { 
+            type: DataTypes.STRING,
+            allowNull: true
+        },
+        dataNascimento:{ 
+            type: DataTypes.DATEONLY,
+            allowNull: true
+        },
         profilePicture: { 
             type: DataTypes.BOOLEAN,
-            deafultValue: false
+            defaultValue: false
         },
         isAdmin: { 
             type: DataTypes.BOOLEAN,
