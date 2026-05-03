@@ -1,3 +1,6 @@
+const Post = require("./postModel");
+const User = require("../user/userModel");
+
 exports.uploadPost = async (req, res) => {
     try {
         const { title, description } = req.body;
@@ -36,7 +39,7 @@ exports.getAllPosts = async () => {
     const posts = await Post.findAll({ 
         include: [{ 
             model: User,
-            attributes: ["id", "username", "fullname", "profilePicture", "unidade"]
+            attributes: ["id", "username", "fullName", "profilePicture", "unidade"]
         }],
         order: [["createdAt", "DESC"]],
         limit: 50
