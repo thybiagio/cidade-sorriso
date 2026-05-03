@@ -58,11 +58,11 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+
+require("./config/associations");
+
 // Importa o objeto 'sequelize' para conexão com o banco de dados
 const sequelize = require('./config/database');
-// Importa o modelo User para sincronização
-const user = require('./modules/user/userModel');
-const post = require('./modules/post/postModel');
 
 // Sincroniza o modelo com o banco de dados
 sequelize.sync({alter: true })

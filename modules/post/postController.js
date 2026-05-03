@@ -31,3 +31,15 @@ exports.uploadPost = async (req, res) => {
         res.redirect("/upload");
     }
 };
+
+exports.getAllPosts = async () => { 
+    const posts = await Post.findAll({ 
+        include: [{ 
+            model: User,
+            attributes: ["id", "username", "fullname", "profilePicture", "unidade"]
+        }],
+        order: [["createdAt", "DESC"]],
+        limit: 50
+    });
+    return posts;
+};
