@@ -1,0 +1,94 @@
+<div class="container my-5">
+    <h3 class="fw-bold mb-4"><i class="bi bi-shield-lock me-2 text-warning"></i>Administração de Membros</h3>
+
+    <div class="table-responsive bg-white rounded-4 shadow-sm p-3">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Membro</th>
+                    <th>Unidade/Cargo</th>
+                    <th>Classes Concluídas</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% membros.forEach(membro => { %>
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="/uploads/avatares/<%= membro.profilePicture %>" class="rounded-circle me-2" width="35" height="35" style="object-fit: cover;">
+                                <div>
+                                    <div class="fw-bold small"><%= membro.fullName %></div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">@<%= membro.username %></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge bg-dark text-warning"><%= membro.unidade || 'S/U' %></span>
+                            <div class="small text-muted"><%= membro.cargoClube %></div>
+                        </td>
+                        <td>
+                            <div class="d-flex flex-wrap gap-1">
+                                <% (membro.classesConcluidas || []).forEach(classe => { %>
+                                    <span class="badge bg-secondary" style="font-size: 0.6rem;"><%= classe %></span>
+                                <% }) %>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-outline-warning rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#edit-<%= membro.id %>">
+                                <i class="bi bi-pencil-square"></i> Atribuir
+                            </button>
+                        </td>
+                    </tr>
+                    <tr class="collapse" id="edit-<%= membro.id %>">
+                        <td colspan="4" class="bg-light p-4">
+                            <form action="/admin/membro/<%= membro.id %>/update" method="POST" class="row g-3">
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Unidade</label>
+                                    <select name="unidade" class="form-select form-select-sm">
+                                        <% unidades.forEach(u => { %>
+                                            <option value="<%= u %>" <%= membro.unidade === u ? 'selected' : '' %>><%= u %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Cargo no Clube</label>
+                                    <select name="cargoClube" class="form-select form-select-sm">
+                                        <% cargosClube.forEach(c => { %>
+                                            <option value="<%= c %>" <%= membro.cargoClube === c ? 'selected' : '' %>><%= c %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="form-label small fw-bold">Cargo na Unidade</label>
+                                    <select name="cargoUnidade" class="form-select form-select-sm">
+                                        <% cargosUnidade.forEach(cu => { %>
+                                            <option value="<%= cu %>" <%= membro.cargoUnidade === cu ? 'selected' : '' %>><%= cu %></option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label small fw-bold d-block">Atribuir Medalhas (Classes)</label>
+                                    <div class="row">
+                                        <% classesDisponiveis.forEach(classe => { %>
+                                            <div class="col-md-3 col-6 mb-2">
+                                                <div class="form-check small">
+                                                    <input class="form-check-input" type="checkbox" name="classesConcluidas" value="<%= classe %>" 
+                                                           <%= (membro.classesConcluidas || []).includes(classe) ? 'checked' : '' %>>
+                                                    <label class="form-check-label"><%= classe %></label>
+                                                </div>
+                                            </div>
+                                        <% }) %>
+                                    </div>
+                                </div>
+                                <div class="col-12 text-end">
+                                    <button type="submit" class="btn btn-warning btn-sm fw-bold px-4">Salvar Alterações</button>
+                                </div>
+                            </form>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+</div>

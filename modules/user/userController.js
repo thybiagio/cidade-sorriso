@@ -47,7 +47,9 @@ exports.login = async (req, res) => {
             username: user.username,
             fullName: user.fullName,
             profilePicture: user.profilePicture,
-            isAdmin: user.isAdmin
+            isAdmin: user.isAdmin,
+            cargoClube: user.cargoClube,
+            unidade: user.unidade
         };
 
         res.redirect("/timeline");

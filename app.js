@@ -11,6 +11,7 @@ var userRoutes = require('./modules/user/userRoutes');
 var postRoutes = require('./modules/post/postRoutes');
 var likeRoutes = require('./modules/like/likeRoutes');
 var commentRoutes = require('./modules/comment/commentRoutes');
+var adminRoutes = require('./modules/admin/adminRoutes');
 
 var app = express();
 var expressLayouts = require('express-ejs-layouts');
@@ -45,6 +46,7 @@ app.use('/', userRoutes);
 app.use('/', postRoutes);
 app.use('/', likeRoutes);
 app.use('/', commentRoutes);
+app.use('/', adminRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

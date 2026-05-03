@@ -1,100 +1,92 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Perfil | Cidade Sorriso</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Poppins:wght@700&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #f4f4f4; font-family: 'Inter', sans-serif; }
-        .navbar { background-color: #111111; padding: 15px 0; }
-        .navbar-brand { color: #f1c40f !important; font-family: 'Poppins', sans-serif; font-weight: bold; }
-    </style>
-</head>
-<body>
-    <%
-        const profilePictureUrl = user.profilePicture && !user.profilePicture.startsWith('default-profile')
-            ? '/uploads/avatares/' + user.profilePicture
-            : '/images/default-profile.svg';
-    %>
-
-    <main class="container py-5 mb-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-
-                <% if (messages.error && messages.error.length > 0) { %>
-                    <div class="alert alert-danger shadow-sm border-0"><%= messages.error %></div>
-                <% } %>
-                <% if (messages.success && messages.success.length > 0) { %>
-                    <div class="alert alert-success shadow-sm border-0"><%= messages.success %></div>
-                <% } %>
-
-                <div class="card shadow" style="border: none; border-radius: 15px;">
-                    <div class="card-header text-center text-white" style="background-color: #111111; padding: 25px; border-radius: 15px 15px 0 0;">
-                        <h3 class="fw-bold mb-0" style="font-family: 'Poppins', sans-serif;">Meu Perfil</h3>
-                        <p class="text-white-50 small mb-0">Atualize sua ficha de membro</p>
-                    </div>
-                    
-                    <div class="card-body p-4 p-md-5">
-                        <form action="/profile/edit" method="POST" enctype="multipart/form-data">
-
-                            <div class="text-center mb-4">
-                                <div class="position-relative d-inline-block">
-                                    <img src="<%= profilePictureUrl %>"
-                                        id="imgPreview" class="rounded-circle border shadow-sm mb-2" 
-                                        width="120" height="120" style="object-fit: cover;">
-                                    
-                                    <label for="profilePicture" class="btn position-absolute bottom-0 end-0 rounded-circle shadow d-flex align-items-center justify-content-center"
-                                        style="width: 35px; height: 35px; background-color: #f1c40f; color: #111; cursor: pointer;">
-                                        <i class="bi bi-camera-fill"></i>
-                                    </label>
-                                    <input type="file" class="d-none" id="profilePicture" name="profilePicture" accept="image/*" onchange="previewImage(this)">
-                                </div>
-                                <p class="small text-muted mt-2">Toque na câmera para mudar sua foto oficial</p>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="fullName" class="form-label fw-bold">Nome Completo</label>
-                                <input type="text" class="form-control" id="fullName" name="fullName" value="<%= user.fullName || '' %>">
-                            </div>
-            
-                            </div>
-
-                            <div class="mb-4">
-                                <label for="bio" class="form-label fw-bold">Biografia do Desbravador</label>
-                                <textarea class="form-control" id="bio" name="bio" rows="3" maxlength="255" placeholder="Fale sobre sua jornada no clube..."><%= user.bio || '' %></textarea>
-                                <div class="text-end small text-muted mt-1" id="charCount">0/255</div>
-                            </div>
-
-                            <button type="submit" class="btn w-100 fw-bold" style="background-color: #111111; color: #f1c40f; padding: 12px; border-radius: 8px;">Salvar Alterações</button>
-                            <div class="text-center mt-3">
-                                <a href="/timeline" class="text-muted small text-decoration-none"><i class="bi bi-arrow-left"></i> Voltar para a Linha do Tempo</a>
-                            </div>
-
-                        </form>
-                    </div>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-lg border-0" style="border-radius: 20px; overflow: hidden;">
+                
+                <div class="card-header text-center text-white py-4" style="background-color: #0d121f;">
+                    <h4 class="fw-bold mb-0" style="font-family: 'Poppins', sans-serif; letter-spacing: 1px;">
+                        FICHA DE <span style="color: #FFC107;">MEMBRO</span>
+                    </h4>
+                    <p class="text-muted small mb-0 mt-1">Dados Oficiais e Configurações</p>
                 </div>
+
+                <div class="card-body p-4 bg-light">
+                    <form action="/profile/edit" method="POST" enctype="multipart/form-data">
+                        
+                        <div class="text-center mb-5">
+                            <h6 class="fw-bold text-uppercase text-muted small mb-3">Foto do Perfil</h6>
+                            
+                            <div class="position-relative d-inline-block">
+                                <img src="/uploads/avatares/<%= user.profilePicture %>" 
+                                     id="preview" 
+                                     class="rounded-circle border border-4 border-warning shadow-sm" 
+                                     style="width: 130px; height: 130px; object-fit: cover;">
+                                
+                                <label for="profilePicture" 
+                                       class="btn btn-dark btn-sm rounded-circle position-absolute bottom-0 end-0 p-2 shadow-lg" 
+                                       style="width: 38px; height: 38px; cursor: pointer;">
+                                    <i class="bi bi-camera-fill text-white"></i>
+                                </label>
+                                <input type="file" id="profilePicture" name="profilePicture" class="d-none" onchange="previewImage(this)">
+                            </div>
+                            <p class="text-muted small mt-2">Clique na câmera para alterar sua foto de perfil.</p>
+                        </div>
+
+                        <div class="p-3 bg-white border rounded-4 mb-4 shadow-sm">
+                            <h6 class="fw-bold text-muted text-uppercase small mb-3" style="letter-spacing: 1px;">Sua Ficha Oficial</h6>
+                            
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold text-muted">Nome Completo</label>
+                                <input type="text" class="form-control" value="<%= user.fullName %>" readonly style="background-color: #f8f9fa;">
+                            </div>
+
+                            <div class="row g-2 mb-3">
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold text-muted">Sua Unidade</label>
+                                    <div class="d-flex align-items-center form-control bg-light">
+                                        <% if (user.unidade) { %>
+                                            <img src="/images/unidades/<%= user.unidade.toLowerCase() %>.png" width="20" height="20" class="me-2" onerror="this.src='/images/logo-desbravadores.png'">
+                                            <span class="small fw-bold text-warning"><%= user.unidade %></span>
+                                        <% } else { %>
+                                            <span class="small text-muted">Sem Unidade</span>
+                                        <% } %>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label small fw-bold text-muted">Seu Cargo</label>
+                                    <input type="text" class="form-control" value="<%= user.cargoClube %>" readonly style="background-color: #f8f9fa;">
+                                </div>
+                            </div>
+
+                            <div class="alert alert-light border small text-muted mb-0 rounded-3">
+                                <i class="bi bi-info-circle me-1 text-warning"></i> 
+                                Dados como <strong>Cargo, Unidade e Classes</strong> são de responsabilidade da Secretaria do Clube e só podem ser alterados pelo Painel Administrativo.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold shadow-sm" style="background-color: #FFC107; color: #0d121f; border: none; border-radius: 10px;">
+                                Salvar Foto
+                            </button>
+                            <a href="/profile/<%= user.username %>" class="btn btn-outline-dark btn-sm rounded-pill text-muted small mt-2">
+                                Voltar para o Perfil
+                            </a>
+                        </div>
+                    </form>
+                </div>
+                
             </div>
         </div>
-    </main>
+    </div>
+</div>
 
-    <script>
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    document.getElementById('imgPreview').src = e.target.result;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-        
-        const bio = document.getElementById('bio');
-        const charCount = document.getElementById('charCount');
-        bio.addEventListener('input', () => charCount.textContent = `${bio.value.length}/255`);
-        charCount.textContent = `${bio.value.length}/255`;
-    </script>
-</body>
-</html>
+<script>
+// Função para pré-visualizar a imagem antes de salvar
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) { $('#preview').attr('src', e.target.result); }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
